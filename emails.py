@@ -51,15 +51,16 @@ def send_email(email_from, email_pass, email_to, listfile, email_message, body, 
             context=ssl.create_default_context() 
 
             #mengirim email
-            print(email_message['To'])
-            os.system('pause')
             try : 
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
                     smtp.login(email_from, email_pass)
                     smtp.sendmail(email_from, email_to, email_string)
                 print("Email berhasil dikirim!")
+                flag=1
             except:
                 print("Error! Pastikan username dan password yang Anda masukan benar!")
+                flag=0
+            return flag
 
 def tambah_email(email_to):
         lagi='ya'
@@ -81,11 +82,9 @@ def main():
     #nilai default
     email_from = os.environ.get('email_from')
     email_pass = os.environ.get('email_password')
-
     alamat = open('listemail.txt','r')
     email_to=alamat.readlines()
     alamat.close()
-
     email_message = MIMEMultipart()
     subject = 'Hello, there!' 
     body = "hei semangatss!"
@@ -102,10 +101,12 @@ def main():
         elif pilihan==3:
             subject=input('Masukan Subject         : ')
             listfile = tambah_file(listfile)
-            print(listfile)
             body=   input("Masukan Body EMail baru : ")
         elif pilihan==4:
-            send_email(email_from, email_pass, email_to, listfile, email_message, body, subject)
+            send = send_email(email_from, email_pass, email_to, listfile, email_message, body, subject)
+            if send == 0:
+                email_from = os.environ.get('email_from')
+                email_pass = os.environ.get('email_password')
         elif pilihan==5:
             tentang=open('tentang.txt','r')
             print(tentang.read())
