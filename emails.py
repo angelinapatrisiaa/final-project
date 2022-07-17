@@ -1,3 +1,8 @@
+#daftar kode program dan daftar pustaka
+#https://www.youtube.com/watch?v=JRCJ6RtE3xU&list=LL&index=3&t=1034s
+#https://www.programcreek.com/python/example/94019/email.mime.multipart.MIMEMultipart
+#https://www.youtube.com/watch?v=NvtjLXSY-hE
+
 #import semua modul yang diperlukan
 import os, smtplib, ssl
 from email.mime.multipart import MIMEMultipart
@@ -32,47 +37,8 @@ def menu():
             print("Mohon masukan menu berupa angka!")
     return int(pilih)
 
-def menu_edit():
-    listfile=[]
-    subject = input("Tuliskan Subject baru   : ")
-
-    return subject, listfile, bodyEmail
-
-
-
-def main():
-    email_from = os.environ.get('email_from')
-    email_pass = os.environ.get('email_password')
-
-    alamat = open('listemail.txt','r')
-    email_to=alamat.readlines()
-    alamat.close()
-
-    email_message = MIMEMultipart('A')
-    subject = 'Test Attachment' 
-    email_message['From'] = email_from
-    email_message['To'] = ','.join(email_to)
-    body = MIMEText("Hei!, semangat!")
-    listfile=['gambar.jpg', 'listemail.txt']
-
-    pilihan = menu()
-    while(pilihan!=6):
-        if pilihan==1:
-            pass
-        elif pilihan==2:
-            pass
-        elif pilihan==3:
-            subject=input('Masukan Subject : ')
-            listfile.clear()
-            lagi='ya'
-            while(lagi.lower()=='ya'):
-                namafile =input("Masukan nama file       : ")
-                listfile.append(namafile)
-                lagi=input("Masukan file baru? [ya/tidak]: ")
-            body=input("Masukan Body EMail baru : ")
-            pass
-        elif pilihan==4:
-            email_message = MIMEMultipart('A')
+def send_email(email_from, email_pass, email_to, listfile, email_message, body, subject):
+            email_message = MIMEMultipart()
             email_message['Subject'] = subject 
             email_message['From'] = email_from
             email_message['To'] = ','.join(email_to)
@@ -85,54 +51,73 @@ def main():
             context=ssl.create_default_context() 
 
             #mengirim email
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
-                smtp.login(email_from, email_pass)
-                smtp.sendmail(email_from, email_to, email_string)
-            
-        elif pilihan==5:
+            print(email_message['To'])
+            os.system('pause')
+            try : 
+                with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
+                    smtp.login(email_from, email_pass)
+                    smtp.sendmail(email_from, email_to, email_string)
+                print("Email berhasil dikirim!")
+            except:
+                print("Error! Pastikan username dan password yang Anda masukan benar!")
+
+def tambah_email(email_to):
+        lagi='ya'
+        while(lagi.lower()=='ya'):
+            tambahemail=input("Masukan email penerima    : ")
+            email_to.append(tambahemail)
+            lagi=input("Masukan email baru? [ya/tidak]: ")
+        return email_to
+
+def tambah_file(listfile):
+        lagi='ya'
+        while(lagi.lower()=='ya'):
+            namafile =input("Masukan nama file       : ")
+            listfile.append(namafile)
+            lagi=input("Masukan file baru? [ya/tidak]: ")
+        return listfile
+
+def main():
+    #nilai default
+    email_from = os.environ.get('email_from')
+    email_pass = os.environ.get('email_password')
+
+    alamat = open('listemail.txt','r')
+    email_to=alamat.readlines()
+    alamat.close()
+
+    email_message = MIMEMultipart()
+    subject = 'Hello, there!' 
+    body = "hei semangatss!"
+    listfile=['gambar.jpg', 'listemail.txt']
+#-------------------------------------------------------
+    pilihan = menu()
+    while(pilihan!=6):
+        if pilihan==1:
+            email_from = input('Masukan email pengirim : ')
+            email_pass = input('Password               : ')
             pass
+        elif pilihan==2:
+            email_to = tambah_email(email_to)
+        elif pilihan==3:
+            subject=input('Masukan Subject         : ')
+            listfile = tambah_file(listfile)
+            print(listfile)
+            body=   input("Masukan Body EMail baru : ")
+        elif pilihan==4:
+            send_email(email_from, email_pass, email_to, listfile, email_message, body, subject)
+        elif pilihan==5:
+            tentang=open('tentang.txt','r')
+            print(tentang.read())
         elif pilihan==6:
             break
         else:
             print("Menu yang Anda pilih tidak tersedia!")
+        os.system('pause')
+        os.system('cls')
         pilihan=menu()
 
 main()
-os.system('pause')
+os.system('cls')
+print("\n\n\t\t~Terima Kasih~\n\n")
 exit()
-
-#informasi default
-#informasi email pengirim
-email_from = os.environ.get('email_from')
-email_pass = os.environ.get('email_password')
-
-#open file listemail untuk mendapatkan alamat email yang akan dituju
-alamat = open('listemail.txt','r')
-email_to=alamat.readlines()
-alamat.close()
-
-#menentukan subject email dan body email
-email_message = MIMEMultipart('A')
-email_message['Subject'] = 'Test Attachment' 
-email_message['From'] = email_from
-email_message['To'] = ','.join(email_to)
-body_email = MIMEText("Hei!, semangat!")
-
-#attach body email serta file ke pesan yang akan dikirim
-email_message.attach(body_email)
-attach_file(email_message, 'gambar.jpg')
-email_string = email_message.as_string()
-
-context=ssl.create_default_context() 
-
-#mengirim email
-with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
-    smtp.login(email_from, email_pass)
-    smtp.sendmail(email_from, email_to, email_string)
-
-
-#daftar kode program
-#https://www.youtube.com/watch?v=JRCJ6RtE3xU&list=LL&index=3&t=1034s
-#https://www.programcreek.com/python/example/94019/email.mime.multipart.MIMEMultipart
-#https://www.youtube.com/watch?v=NvtjLXSY-hE
-
