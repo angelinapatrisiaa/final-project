@@ -1,0 +1,17 @@
+Program Pengiriman Email dengan Python
+
+- Terdapat beberapa menu yang dapat dipilih oleh user, yaitu:
+  1. Ganti email pengirim 
+     -> user dapat mengganti email pengirim dengan memasukan username (alamat gmail) dan password
+     -> email pengirim hanya dapat berupa akun gmail
+  2. Menambahkan email penerima
+     -> user dapat menambahkan email penerima di luar email yang telah terdaftar pada listemail.txt
+     -> email baru yang ditambahkan akan hilang ketika program ditutup
+  3. Mengedit isi pesan
+     -> user dapat mengedit subject, file attachment, serta body email yang ingin dikirim
+     -> segala perubahan yang dilakukan akan hilang jika program ditutup, subject, file attachmnent, serta body akan kembali ke mode default
+  4. Kirm email
+  5. Tentang program
+  6. Keluar dari program
+
+- Setelah memilih satu menu, user dapat memilih kembali menu yang diinginkannya sampai user memilih untuk keluar dari program
