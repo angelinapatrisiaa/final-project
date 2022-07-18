@@ -51,6 +51,7 @@ def send_email(email_from, email_pass, email_to, listfile, email_message, body, 
             context=ssl.create_default_context() 
 
             #mengirim email
+            #email akan berhasil dikirim jika username dan password yang dimasukan (jika memilih menu1) cocok, jika tidak pesan error akan ditampilkan
             try : 
                 with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as smtp:
                     smtp.login(email_from, email_pass)
@@ -63,6 +64,8 @@ def send_email(email_from, email_pass, email_to, listfile, email_message, body, 
             return flag
 
 def tambah_email(email_to):
+    #menambahkan email baru ke list email yang telah tersedia
+    #email baru tidak akna dimasukan ke dalam file listemail
         lagi='ya'
         while(lagi.lower()=='ya'):
             tambahemail=input("Masukan email penerima    : ")
@@ -71,6 +74,8 @@ def tambah_email(email_to):
         return email_to
 
 def tambah_file(listfile):
+    #menambahkan file baru ke list file yang telah tersedia
+    #file baru tidak akna dimasukan ke dalam file listefile
         lagi='ya'
         while(lagi.lower()=='ya'):
             namafile =input("Masukan nama file       : ")
@@ -93,21 +98,27 @@ def main():
     pilihan = menu()
     while(pilihan!=6):
         if pilihan==1:
+            #mengganti email_from dan email_pass
             email_from = input('Masukan email pengirim : ')
             email_pass = input('Password               : ')
             pass
         elif pilihan==2:
+            #memanggil function tambah_email untuk menambahkan email baru ke list penerima email
             email_to = tambah_email(email_to)
         elif pilihan==3:
+            #mengganti subject, body, dan file attachment (dengan memanggil function tambah_file)
             subject=input('Masukan Subject         : ')
             listfile = tambah_file(listfile)
             body=   input("Masukan Body EMail baru : ")
         elif pilihan==4:
+            #mengirimkan email dengan memanggil function send_email
             send = send_email(email_from, email_pass, email_to, listfile, email_message, body, subject)
+            #jika ditemukan ketidak cocokan antara username dan password yang dimasukan, email_from dan email_pass akan diubah kembali ke bentuk default
             if send == 0:
                 email_from = os.environ.get('email_from')
                 email_pass = os.environ.get('email_password')
         elif pilihan==5:
+            #membuka file tentang.txt yang berisi penjelasan singkat program
             tentang=open('tentang.txt','r')
             print(tentang.read())
         elif pilihan==6:
